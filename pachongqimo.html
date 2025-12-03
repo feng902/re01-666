@@ -1,0 +1,688 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>鲜果乐园 - 新鲜水果在线购买</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      background-color: #f9f7f2;
+      color: #333;
+    }
+
+    /* 头部样式 */
+    header {
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      color: white;
+      text-align: center;
+      padding: 3rem 1rem;
+      position: relative;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    /* 导航栏 */
+    nav {
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav ul {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      padding: 1rem 0;
+    }
+
+    nav a {
+      color: #333;
+      text-decoration: none;
+      margin: 0 1.5rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    nav a:hover {
+      color: #e74c3c;
+    }
+
+    nav a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 3px;
+      background: #e74c3c;
+      border-radius: 2px;
+    }
+
+    /* 主体容器 */
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    /* 页面通用标题 */
+    .section-title {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #d35400;
+      font-size: 2rem;
+      position: relative;
+      padding-bottom: 15px;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: #e74c3c;
+      border-radius: 2px;
+    }
+
+    /* 首页轮播图区域 */
+    .hero {
+      text-align: center;
+      padding: 50px 20px;
+      background: url('https://bailian-bmp-pre.oss-cn-hangzhou.aliyuncs.com/public/system_agent/PlaceHolder.png') no-repeat center center;
+      background-size: cover;
+      border-radius: 15px;
+      margin-bottom: 40px;
+      color: white;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      border-radius: 15px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+
+    .btn-primary {
+      display: inline-block;
+      padding: 12px 30px;
+      background: #e74c3c;
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      transition: background 0.3s;
+      box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: #c0392b;
+    }
+
+    /* 水果展示网格 */
+    .fruit-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 25px;
+    }
+
+    .fruit-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .fruit-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+    }
+
+    .fruit-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .fruit-info {
+      padding: 15px;
+    }
+
+    .fruit-info h3 {
+      font-size: 1.3rem;
+      color: #2c3e50;
+      margin-bottom: 8px;
+    }
+
+    .fruit-info p {
+      color: #7f8c8d;
+      font-size: 0.95rem;
+      margin-bottom: 10px;
+    }
+
+    .price {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #e67e22;
+      margin-bottom: 12px;
+    }
+
+    .add-to-cart {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background: #2ecc71;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .add-to-cart:hover {
+      background: #27ae60;
+    }
+
+    /* 关于我们页面样式 */
+    .about-content {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .about-content img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 20px;
+      border: 5px solid #f8f9fa;
+    }
+
+    .about-content h3 {
+      color: #2c3e50;
+      margin-bottom: 15px;
+      font-size: 1.8rem;
+    }
+
+    .about-content p {
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+      color: #555;
+      text-align: justify;
+    }
+
+    /* 特惠标签 */
+    .discount-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #e74c3c;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    /* 购物车面板 */
+    .cart-sidebar {
+      position: fixed;
+      right: -400px;
+      top: 0;
+      width: 400px;
+      height: 100vh;
+      background: white;
+      box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+      z-index: 1000;
+      transition: right 0.4s ease;
+      overflow-y: auto;
+    }
+
+    .cart-sidebar.open {
+      right: 0;
+    }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #eee;
+    }
+
+    .close-cart {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+
+    .cart-items {
+      padding: 20px;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px dashed #eee;
+    }
+
+    .cart-total {
+      padding: 20px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    .checkout-btn {
+      display: block;
+      width: 90%;
+      margin: 20px auto;
+      padding: 15px;
+      background: #3498db;
+      color: white;
+      text-align: center;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    .open-cart-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      z-index: 999;
+    }
+
+    /* 页面显示控制 */
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* 页脚 */
+    footer {
+      background: #34495e;
+      color: white;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 50px;
+    }
+
+    footer p {
+      opacity: 0.8;
+    }
+
+    /* 响应式 */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2.2rem;
+      }
+      .cart-sidebar {
+        width: 100%;
+        right: -100%;
+      }
+      .hero h2 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 头部 -->
+  <header>
+    <h1>🍓 鲜果乐园</h1>
+    <p>新鲜采摘 · 当日送达 · 全国包邮</p>
+  </header>
+
+  <!-- 导航栏 -->
+  <nav>
+    <ul>
+      <li><a href="#home" class="nav-link active" data-page="home">首页</a></li>
+      <li><a href="#fruits" class="nav-link" data-page="fruits">水果分类</a></li>
+      <li><a href="#deals" class="nav-link" data-page="deals">限时特惠</a></li>
+      <li><a href="#about" class="nav-link" data-page="about">关于我们</a></li>
+    </ul>
+  </nav>
+
+  <!-- 主体内容 -->
+  <div class="container">
+
+    <!-- 首页 -->
+    <div id="home" class="page active">
+      <div class="hero">
+        <div class="hero-content">
+          <h2>今日特惠：满99减20！</h2>
+          <p>全场新鲜水果，冷链配送，最快次日达</p>
+          <a href="#fruits" class="btn-primary">立即选购</a>
+        </div>
+      </div>
+
+      <h2 class="section-title">热销推荐</h2>
+      <div class="fruit-grid" id="fruitGrid"></div>
+    </div>
+
+    <!-- 水果分类 -->
+    <div id="fruits" class="page">
+      <h2 class="section-title">全部水果分类</h2>
+      <div class="fruit-grid" id="allFruitsGrid"></div>
+    </div>
+
+    <!-- 限时特惠 -->
+    <div id="deals" class="page">
+      <h2 class="section-title">限时特惠专区</h2>
+      <div class="fruit-grid" id="dealsGrid"></div>
+    </div>
+
+    <!-- 关于我们 -->
+    <div id="about" class="page">
+      <h2 class="section-title">关于我们</h2>
+      <div class="about-content">
+        <img src="https://bailian-bmp-pre.oss-cn-hangzhou.aliyuncs.com/public/system_agent/PlaceHolder.png" alt="公司形象">
+        <h3>鲜果乐园 · 只为一口新鲜</h3>
+        <p>我们成立于2020年，致力于为全国用户提供高品质、可溯源的新鲜水果。所有水果均来自合作果园直采，从采摘到发货不超过12小时。</p>
+        <p>我们拥有专业的冷链物流团队，覆盖全国300+城市，确保每一颗水果都能以最佳状态送达您的手中。</p>
+        <p>客服电话：400-123-4567<br>工作时间：每日 9:00 - 21:00</p>
+        <p><strong>使命：</strong>让每个人都能轻松享受真正的新鲜水果</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 购物车侧边栏 -->
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3>我的购物车</h3>
+      <button class="close-cart" id="closeCart">×</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-total" id="cartTotal">总计：¥0.00</div>
+    <button class="checkout-btn">立即结算</button>
+  </div>
+
+  <!-- 打开购物车按钮 -->
+  <button class="open-cart-btn" id="openCartBtn">🛒<span id="cartCount" style="display:none;">0</span></button>
+
+  <!-- 页脚 -->
+  <footer>
+    <p>© 2024 鲜果乐园 - 让每一口都新鲜可口</p>
+    <p>客服电话：400-123-4567 | 配送时间：每日 9:00 - 21:00</p>
+  </footer>
+
+  <script>
+    // 水果数据（新增特价字段）
+    const fruits = [
+      {
+        id: 1,
+        name: "智利车厘子",
+        price: 98.00,
+        desc: "进口大颗车厘子，甜脆多汁，富含维生素C",
+        img: "https://bailian-bmp-pre.oss-cn-hangzhou.aliyuncs.com/public/system_agent/PlaceHolder.png",
+        category: "进口水果",
+        isDeal: true,
+        dealPrice: 79.90
+      },
+      {
+        id: 2,
+        name: "海南芒果",
+        price: 29.90,
+        desc: "树上熟贵妃芒，香甜软糯，果肉细腻",
+        img: "https://bailian-bmp-pre.oss-cn-hangzhou.aliyuncs.com/public/system_agent/PlaceHolder.png",
+        category: "热带水果",
+        isDeal: false
+      },
+      {
+        id: 3,
+        name: "丹东草莓",
+        price: 68.00,
+        desc: "现摘现发，颗颗饱满，红润香甜",
+        img: "https://bailian-bmp-pre.oss-cn-hangzhou.aliyuncs.com/public/system_agent/PlaceHolder.png",
+        category: "浆果类",
+        isDeal: true,
+        dealPrice: 59.90
+      },
+      {
+        id: 4,
+        name: "新疆哈密瓜",
+        price: 35.00,
+        desc: "正宗木瓜条哈密瓜，清甜爽口，水分充足",
+        img: "https://bailian-bmp-pre.oss-cn-hangzhou.aliyuncs.com/public/system_agent/PlaceHolder.png",
+        category: "瓜类",
+        isDeal: false
+      },
+      {
+        id: 5,
+        name: "云南蓝莓",
+        price: 42.00,
+        desc: "有机种植，粒粒精选，抗氧化佳品",
+        img: "https://bailian-bmp-pre.oss-cn-hangzhou.aliyuncs.com/public/system_agent/PlaceHolder.png",
+        category: "浆果类",
+        isDeal: true,
+        dealPrice: 36.90
+      },
+      {
+        id: 6,
+        name: "泰国金枕榴莲",
+        price: 128.00,
+        desc: "树上熟自然裂口，果肉金黄，香浓绵密",
+        img: "https://bailian-bmp-pre.oss-cn-hangzhou.aliyuncs.com/public/system_agent/PlaceHolder.png",
+        category: "热带水果",
+        isDeal: false
+      }
+    ];
+
+    // 购物车数组
+    let cart = [];
+
+    // DOM 元素
+    const pages = document.querySelectorAll('.page');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const fruitGrid = document.getElementById('fruitGrid');
+    const allFruitsGrid = document.getElementById('allFruitsGrid');
+    const dealsGrid = document.getElementById('dealsGrid');
+    const cartSidebar = document.getElementById('cartSidebar');
+    const closeCart = document.getElementById('closeCart');
+    const openCartBtn = document.getElementById('openCartBtn');
+    const cartItems = document.getElementById('cartItems');
+    const cartTotal = document.getElementById('cartTotal');
+    const cartCount = document.getElementById('cartCount');
+
+    // 切换页面
+    function showPage(pageId) {
+      pages.forEach(p => p.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+
+      navLinks.forEach(link => link.classList.remove('active'));
+      document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
+    }
+
+    // 渲染水果卡片的函数
+    function renderFruitCards(container, fruitList) {
+      container.innerHTML = '';
+      fruitList.forEach(fruit => {
+        const card = document.createElement('div');
+        card.className = 'fruit-card';
+        
+        let priceHtml = `¥${fruit.price.toFixed(2)}`;
+        if (fruit.isDeal) {
+          priceHtml = `
+            <span style="text-decoration:line-through;color:#999;font-size:0.9rem;">¥${fruit.price.toFixed(2)}</span>
+            <br>¥${fruit.dealPrice.toFixed(2)}
+          `;
+        }
+
+        card.innerHTML = `
+          ${fruit.isDeal ? '<div class="discount-badge">限时特惠</div>' : ''}
+          <img src="${fruit.img}" alt="${fruit.name}" class="fruit-img">
+          <div class="fruit-info">
+            <h3>${fruit.name}</h3>
+            <p>${fruit.desc}</p>
+            <div class="price">${priceHtml}</div>
+            <button class="add-to-cart" data-id="${fruit.id}">加入购物车</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      // 绑定加入购物车事件
+      container.querySelectorAll('.add-to-cart').forEach(btn => {
+        btn.addEventListener('click', addToCart);
+      });
+    }
+
+    // 加入购物车
+    function addToCart(e) {
+      const fruitId = parseInt(e.target.getAttribute('data-id'));
+      const fruit = fruits.find(f => f.id === fruitId);
+      
+      const existing = cart.find(item => item.id === fruitId);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ ...fruit, quantity: 1 });
+      }
+
+      updateCart();
+      alert(`已加入：${fruit.name}`);
+    }
+
+    // 更新购物车显示
+    function updateCart() {
+      cartItems.innerHTML = '';
+      let total = 0;
+
+      cart.forEach(item => {
+        const itemTotal = (item.isDeal ? item.dealPrice : item.price) * item.quantity;
+        total += itemTotal;
+
+        const cartItem = document.createElement('div');
+        cartItem.className = 'cart-item';
+        cartItem.innerHTML = `
+          <div>
+            <strong>${item.name}</strong> × ${item.quantity}
+          </div>
+          <div>¥${itemTotal.toFixed(2)}</div>
+        `;
+        cartItems.appendChild(cartItem);
+      });
+
+      cartTotal.textContent = `总计：¥${total.toFixed(2)}`;
+      cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+      cartCount.style.display = cart.length > 0 ? 'inline' : 'none';
+    }
+
+    // 页面初始化
+    function init() {
+      // 渲染各页面水果
+      renderFruitCards(fruitGrid, fruits.slice(0, 4)); // 首页推荐
+      renderFruitCards(allFruitsGrid, fruits); // 全部分类
+      renderFruitCards(dealsGrid, fruits.filter(f => f.isDeal)); // 仅特惠
+
+      // 导航点击事件
+      navLinks.forEach(link => {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          const page = link.getAttribute('data-page');
+          showPage(page);
+        });
+      });
+
+      // 打开/关闭购物车
+      openCartBtn.addEventListener('click', () => {
+        cartSidebar.classList.add('open');
+      });
+
+      closeCart.addEventListener('click', () => {
+        cartSidebar.classList.remove('open');
+      });
+
+      // 初始化购物车
+      updateCart();
+
+      // 点击空白处关闭购物车
+      document.addEventListener('click', (e) => {
+        if (!cartSidebar.contains(e.target) && !openCartBtn.contains(e.target) && cartSidebar.classList.contains('open')) {
+          cartSidebar.classList.remove('open');
+        }
+      });
+    }
+
+    // 启动
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
